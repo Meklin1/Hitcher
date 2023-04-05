@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WebApplication2.Data;
+using WebApplication2.Models.Driver;
 using WebApplication2.Models.Travel;
 using WebApplication2.Models.User;
 
@@ -16,6 +17,10 @@ public class ChosenTripsRepository : IChosenTripsRepository
         _chosenTripsList = context.ChosenTrips;
     }
 
+    public void SetTripRating(DriverRatingDTO rating)
+    {
+
+    }
     public DbSet<ChosenTripsModel> GetChosenTrips()
     {
         return _chosenTripsList;
