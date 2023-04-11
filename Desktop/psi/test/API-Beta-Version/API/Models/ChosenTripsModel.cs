@@ -11,7 +11,7 @@ public class ChosenTripsModel
     public Guid TravelId { get; set; }
     [Required]
     public bool Driver { get; set; }
-    public int ComfortRating { get; set; }
-    public int PersonalityRating { get; set; }
-    public int OverallRating { get; set; }
+    public int? ComfortRating { get; set; }
+    public int? PersonalityRating { get; set; }
+    public int? OverallRating { get; set; }
 }
