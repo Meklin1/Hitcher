@@ -201,7 +201,7 @@
                                     <div class="action">
                                         <a>
                                             <button type="button" class="button" name=@Html.DisplayFor(modelItem => i)
-                                                    onclick="calcRouteMapViewMyTrip(this.name, @Model.LatLng)">
+                                    onclick="calcRouteMapViewMyTrip(this.name, @Model.LatLng)">
                                                 VIEW
                                             </button>
                                         </a>
@@ -273,7 +273,7 @@
                                             <div class="d-flex flex-column  p-2">
                                                 @* <span>Kamilė Samusiovaite</span> *@
                                                 <span class="d-block font-weight-bold">@Html.DisplayFor(modelItem => travel.DriverName) @Html.DisplayFor(modelItem => travel.DriverSurname) </span>
-
+                                                <input type="hidden" id="travelId" value="@travel.Id">
                                             </div>
                                         </div>
                                     </div>
@@ -327,7 +327,6 @@
                                         </div>
                                         }
 
-
                                 </td>
                             </tr>
                         }
@@ -348,16 +347,16 @@
             <div class="modal-body">
                 <form>
                     <div class="form-group">
-                        <label for="confortRating" class="form-control-label">Confort Rating</label>
-                        <input type="number" class="form-control" id="confortRating" placeholder="Enter Confort Rating">
+                        <label for="comfortRating" class="form-control">Comfort Rating</label>
+                        <input type="number" class="form-control" id="comfortRating" placeholder="Enter Confort Rating" min="0" max="10" required>
                     </div>
                     <div class="form-group">
-                        <label for="personalityRating" class="col-form-label">Personality rating:</label>
-                        <input type="number" class="form-control" id="personalityRating" name="personalityRating" step="0.1" min="0" max="10" required>
+                        <label for="personalityRating" class="form-control">Personality rating:</label>
+                        <input type="number" class="form-control" id="personalityRating" placeholder="Enter Personality Rating" min="0" max="10" required>
                     </div>
                     <div class="form-group">
-                        <label for="comfortRating" class="col-form-label">Comfort rating:</label>
-                        <input type="number" class="form-control" id="comfortRating" name="comfortRating" step="0.1" min="0" max="10" required>
+                        <label for="comfortRating" class="form-control">Overall rating:</label>
+                        <input type="number" class="form-control" id="overallRating" placeholder="Enter Overall Rating" min="0" max="10" required>
                     </div>
                 </form>
             </div>
@@ -375,14 +374,15 @@
             var overallRating = $("#overallRating").val();
             var personalityRating = $("#personalityRating").val();
             var comfortRating = $("#comfortRating").val();
+            var travelId = $("#travelId").val();
 
             $.ajax({
-                url: "/Driver/RateDriver",
+                url: "/AddRating",
                 type: "POST",
-                data: { overallRating: overallRating, personalityRating: personalityRating, comfortRating: comfortRating },
+                data: { TravelID: travelId, Overall: overallRating, Personality: personalityRating, Comfort: comfortRating },
                 success: function (data) {
                     // handle success
-                    $('#ratingModal').modal('hide');
+                    $('#driverRatingModal').modal('hide');
                     alert("Thank you for rating!");
                 },
                 error: function () {
@@ -393,7 +393,6 @@
         });
     });
 </script>
-
 
 
 <script type="text/javascript">

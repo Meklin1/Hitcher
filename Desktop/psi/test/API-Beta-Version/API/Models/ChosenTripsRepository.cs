@@ -36,6 +36,11 @@ public class ChosenTripsRepository : IChosenTripsRepository
         return _chosenTripsList.Where(e => e.UserId == userId);
     }
 
+    public IQueryable<ChosenTripsModel> GetPassengerTrip(Guid userId)
+    {
+        return _chosenTripsList.Where(e => e.UserId == userId);
+    }
+
     public void Save()
     {
         _context.SaveChanges();

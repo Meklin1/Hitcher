@@ -164,24 +164,65 @@ public class HomeController : Controller
         return RedirectToAction("Datecher", "Home");
     }
 
+    //[HttpPost]
+    //[Route("/AddRating")]
+    //public IActionResult AddRating(DriverRatingDTO rating)
+    //{
+    //    if(rating == null || rating.TravelID == null) {
+    //        return RedirectToAction(nameof(Index));
+    //    }
+    //    //var travelId = HttpContext.Session.GetString(TravelUser);
+    //    var userID = HttpContext.Session.GetString(LoggedUser);
+    //    var chosenTrip = new ChosenTripsModel
+    //    {
+    //        UserId =  Guid.Parse(userID),
+    //        TravelId = rating.TravelID,
+    //        Driver = false,
+    //        OverallRating = rating.Overall,
+    //        ComfortRating = rating.Comfort,
+    //        PersonalityRating = rating.Personality
+    //    };
+    //    _chosenTripsList.Add(chosenTrip);
+    //    _chosenTripsRepository.Save();
+
+    //    return RedirectToAction(nameof(Index));
+    //}
+
+    public ChosenTripsModel GetChosenTrip(Guid userID, Guid travelID)
+    {
+        return _chosenTripsList.SingleOrDefault(t => t.UserId == userID && t.TravelId == travelID);
+    }
+
     [HttpPost]
+    [Route("/AddRating")]
     public IActionResult AddRating(DriverRatingDTO rating)
     {
-        if(rating == null || rating.TravelID == null) {
+        if (rating == null || rating.TravelID == null)
+        {
             return RedirectToAction(nameof(Index));
         }
+
         var userID = HttpContext.Session.GetString(LoggedUser);
-        var chosenTrip = new ChosenTripsModel
+
+        // Retrieve the existing chosen trip for this user and travel ID
+        var chosenTrip = GetChosenTrip(Guid.Parse(userID), rating.TravelID);
+
+        if (chosenTrip != null)
         {
-            UserId =  Guid.Parse(userID),
-            TravelId = rating.TravelID,
-            Driver = false,
-            OverallRating = rating.Overall,
-            ComfortRating = rating.Comfort,
-            PersonalityRating = rating.Personality
-        };
-        _chosenTripsList.Add(chosenTrip);
-        _chosenTripsRepository.Save();
+            // Update the chosen trip with the new rating values
+            chosenTrip.OverallRating = rating.Overall;
+            chosenTrip.ComfortRating = rating.Comfort;
+            chosenTrip.PersonalityRating = rating.Personality;
+
+            _chosenTripsRepository.Save();
+
+            return RedirectToAction(nameof(Index));
+        }
+        else
+        {
+            // Handle the case where no chosen trip was found
+            // ...
+        }
 
         return RedirectToAction(nameof(Index));
     }
@@ -441,6 +482,7 @@ public class HomeController : Controller
         };
         _chosenTripsList.Add(chosenTrip);
         _chosenTripsRepository.Save();
+        //TempData["travelID"]=tripId;
 
         return RedirectToAction(nameof(Index));
     }
